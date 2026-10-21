@@ -1161,7 +1161,7 @@ def cb_estadistica(vista):
                       legend=dict(orientation="h", y=-0.3, x=0))
     texto = [html.B("💡 Interpretación: "), "La prueba de DeLong compara las curvas ROC de los dos modelos sobre las mismas 116.203 "
              "celdas. Las siete diferencias son significativas tras la corrección de Holm (p < 10⁻³⁰⁰ en todas); la mejora es mayor "
-             "en las clases que más se confundían (pícea/abeto y lodgepole). El tamaño del efecto (δ de Cliff = 1) es máximo. ",
+             "en las clases que más se confundían (pícea/abeto y lodgepole). El tamaño del efecto es máximo: en los tres pliegues externos XGBoost supera a todas las demás familias (δ de Cliff = 1). ",
              html.A("Profundiza en la sección 7.3 del Jupyter Book →", href=LIBRO + "08_comparacion_estadistica.html", target="_blank")]
     return fig, texto
 
