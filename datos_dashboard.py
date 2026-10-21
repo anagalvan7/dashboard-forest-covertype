@@ -14,7 +14,7 @@ from scipy.stats import studentized_range
 
 DATOS = Path(__file__).resolve().parent / "datos"
 RES = DATOS / "resultados"
-LIBRO = "https://Maria856578.github.io/MachineLearning/"
+LIBRO = "https://anagalvan7.github.io/proyecto-final-ml/"
 
 # ------------------------------------------------------------------ constantes
 CLASES = list(range(1, 8))
