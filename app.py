@@ -389,8 +389,9 @@ def sub_benchmark():
             ]), lg=7, className="mb-3"),
             dbc.Col(tarjeta("¿Ayuda balancear las clases?", "mdi:scale-balance", "cab-ocre", [
                 grafica("fig-balanceo"),
-                nota("Diferencia de F1 macro de cada estrategia frente a no balancear, por algoritmo. En casi todos los casos el "
-                     "balanceo no mejora el F1 macro: con 40.000 celdas, las clases minoritarias ya tienen suficientes ejemplos.",
+                nota("Diferencia de F1 macro de cada estrategia frente a no balancear, por algoritmo. El balanceo no mejora a los "
+                     "mejores algoritmos: en XGBoost lo reduce entre 0,086 y 0,103, y en Random Forest SMOTE y ADASYN lo elevan menos "
+                     "de 0,01. En XGBoost la comparación está condicionada por la asimetría de los espacios de búsqueda.",
                      "06_benchmark_modelos.html", "5.4"),
             ]), lg=5, className="mb-3"),
         ]),
@@ -413,8 +414,9 @@ def sub_optimizacion():
                 ], className="mb-2"),
                 grafica("fig-anytime"),
                 nota("Árbol de decisión, espacio de 5 hiperparámetros, 30 evaluaciones y 5 semillas. La línea es el mejor F1 "
-                     "encontrado hasta ese momento (media de las semillas) y la banda, su rango. TPE llega más alto y antes; en el "
-                     "benchmark, con rejillas pequeñas, Grid Search ya era casi exhaustivo y las diferencias desaparecían.",
+                     "encontrado hasta ese momento (media de las semillas) y la banda, su rango. TPE obtiene la mejor solución y la más "
+                     "estable (0,7226) y la mayor área bajo la curva (0,700). En el benchmark, con rejillas pequeñas y seis ensayos, "
+                     "esa ventaja no aparecía.",
                      "07_optimizacion.html", "6.4"),
             ]), lg=7, className="mb-3"),
             dbc.Col(tarjeta("Los cuatro métodos en el benchmark", "mdi:tune", "cab-azul", [
@@ -434,8 +436,8 @@ def sub_optimizacion():
                     html.Div(kpi("💰 Ahorro de cómputo", f"{ahorro:.0f} %", "frente a evaluar todo con el presupuesto completo", 5), className="mt-3"),
                 ], lg=4),
             ]),
-            nota("El ganador (profundidad 20, hoja mínima 1) es el mismo que habría encontrado la búsqueda completa, a una "
-                 "fracción del costo.", "07_optimizacion.html", "6.6"),
+            nota("El ganador (profundidad 20, hoja mínima 1) ya era el primero con 20 árboles y el orden entre configuraciones "
+                 "se mantuvo en todas las rondas: por eso descartar pronto no costó calidad.", "07_optimizacion.html", "6.6"),
         ], "mb-3"),
     ])
 
@@ -653,7 +655,7 @@ app.layout = html.Div([
     html.Div(dbc.Container(dbc.Row([
         dbc.Col([
             html.H1("🌲 Clasificación de Cobertura Forestal - Roosevelt National Forest"),
-            html.Div("Montañas Rocosas del norte de Colorado · Curso Machine Learning · Tercer entregable", className="subtitulo"),
+            html.Div("Curso Machine Learning · Tercer entregable", className="subtitulo"),
             html.Div([dbc.Badge("👩‍🔬 Ana Galván", color="light", text_color="success"),
                       dbc.Badge("👩‍🔬 Valeria Oñate", color="light", text_color="primary"),
                       dbc.Badge("👩‍🔬 María José Ruiz", color="light", text_color="danger")], className="mt-2"),
@@ -677,7 +679,8 @@ app.layout = html.Div([
             dbc.Tab(pestana_modelos(), label="🤖 Modelos de Machine Learning", tab_id="modelo"),
         ], id="pestanas", active_tab="contexto"),
         html.Div(["Datos: Covertype, UCI Machine Learning Repository (Blackard y Dean, 1998; CC BY 4.0) · ",
-                  html.A("Informe técnico en Jupyter Book", href=LIBRO, target="_blank")], className="pie"),
+                  html.A("Informe técnico en Jupyter Book", href=LIBRO, target="_blank"),
+                  html.Br(), "Fotografía del encabezado: Jaye Travel Blog (2022), uso académico."], className="pie"),
     ], fluid="xl"),
 ])
 
@@ -814,10 +817,10 @@ def cb_metricas(vista):
 
 
 NOTAS_COEF = {
-    1: "Cada 100 m de ascenso multiplican sus odds por ≈ {or_}. Rawah y los suelos subalpinos la favorecen; Cache la Poudre y los suelos rocosos del cañón la excluyen.",
-    2: "Efecto altitudinal moderado (≈ ×{or_} por cada 100 m): ocupa el centro del gradiente. Sus coeficientes más fuertes son edáficos.",
+    1: "Cada 100 m de ascenso multiplican sus odds por ≈ {or_}. Rawah y los suelos subalpinos (9, 21 y 22) la favorecen; los suelos pedregosos 2, 4 y 37 la excluyen.",
+    2: "Efecto altitudinal moderado (≈ ×{or_} por cada 100 m): ocupa el centro del gradiente. Sus coeficientes más fuertes son geográficos y edáficos: Rawah y el suelo 12 a favor; los suelos 1, 4 y 5 del cañón en contra.",
     3: "La altitud la penaliza (≈ ×{or_} por cada 100 m). Los suelos 1 a 4, complejos de afloramiento rocoso del cañón, son su firma edáfica; Rawah la excluye.",
-    4: "Cache la Poudre ({cp}) actúa como atajo geográfico: es la única área con bosque ribereño. Cada 100 m de ascenso reducen sus odds a ≈ {or_}, y la cercanía al agua la favorece.",
+    4: "Las áreas silvestres actúan como atajo geográfico: Cache la Poudre ({cp}), la única con bosque ribereño, la favorece y Comanche Peak la excluye. Cada 100 m de ascenso reducen sus odds a ≈ {or_}.",
     5: "Sin variables de perturbación (incendios, edad del rodal), ninguna predictora le da suficiente evidencia: su recall es apenas {rec}.",
     6: "Los índices de sombreado tienen signos opuestos por colinealidad: solo su efecto conjunto tiene lectura física, a favor de laderas poco expuestas.",
     7: "El efecto altitudinal más fuerte del modelo: +100 m multiplican sus odds por ≈ {or_}. Los suelos pedregosos de alta montaña completan su firma.",
